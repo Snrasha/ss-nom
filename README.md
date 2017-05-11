@@ -18,3 +18,7 @@ Music
 Snrasha update:
 
 Fighter :  tags,tier,rarity to made, range, attackrunrange,role desc
+Faction
+Ship
+
+Faction have be filled with stuff of looters faction
