@@ -3,7 +3,7 @@
   "author":"Trylobot",
   "id":"nomads",
 	"version":"1.0",
-	"description":"The Nomad Armada wanders about",
+	"description":"The Nomad Armada wanders about   , Updated to 0.8a per Snrasha",
 	"modPlugin":"data.scripts.TheNomadsModPlugin",
-  "gameVersion":"0.6.1a",
+  "gameVersion":"0.8a",
 }

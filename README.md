@@ -10,3 +10,11 @@ Balance
 
 Music
   * either combat, campaign or elsewhere: Sheherazade by wnm (edited for looping)
+
+
+
+
+
+Snrasha update:
+
+Fighter :  tags,tier,rarity to made, range, attackrunrange,role desc
