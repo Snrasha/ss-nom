@@ -6,7 +6,7 @@ Sandstorm,nom_sandstorm,Battlecruiser,highenergyfocus,22,12500,1050,1200,,950,27
 
 Gila Monster,nom_gila_monster,Battleship,highenergyfocus,26,25000,1200,1700,,1075,255,,30,15,10,4.25,3.12,5100,OMNI,,165,0.4,0.75,,,550,1500,600,1200,30,40,3,160000,5,30,,,5,20,,0.2,2,3,1337104
 
-Rattlesnake,nom_rattlesnake,Heavy Cruiser,highenergyfocus,16,10750,1450,900,,675,200,,45,30,25,18,15,2000,OMNI,,150,0.3,0.88,,,180,500,,250,250,8,40,3,40000,5,25,,,8,8,,0.2,2,3,1337112
+Rattlesnake,nom_rattlesnake,Heavy Cruiser,highenergyfocus,16,10750,1450,900,,675,200,,45,30,25,18,15,2000,OMNI,,150,0.3,0.88,,,,180,500,,250,250,8,40,3,40000,5,25,,,8,8,,0.2,2,3,1337112
 
 Scorpion,nom_scorpion,Destroyer,fastmissileracks,10,3000,225,90,,225,105,,65,50,20,30,30,200,OMNI,,220,0.15,0.7,,,10,15,,100,100,2,50,4,9000,5,25,,,10,5,,0.2,2,3,1337105
 
