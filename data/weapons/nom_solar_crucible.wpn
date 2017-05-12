@@ -1,6 +1,6 @@
 {
 	"id":"nom_solar_crucible",
-	"everyFrameEffect":"data.scripts.weapons.TheNomadsSolarCrucibleChargeupEffect",
+	"everyFrameEffect":"src.data.scripts.weapons.TheNomadsSolarCrucibleChargeupEffect",
 	"specClass":"beam",
 	"type":"ENERGY",
 	"size":"LARGE",

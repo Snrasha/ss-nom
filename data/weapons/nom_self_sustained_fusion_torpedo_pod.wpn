@@ -26,5 +26,5 @@
 		"particleColor":[100,100,100,200]
 	},
 	"fireSoundTwo":"nom_self_sustained_fusion_torpedo_fire",
-	"everyFrameEffect":"data.scripts.weapons.TheNomadsSelfSustainedFusionTorpedoEffect",
+	"everyFrameEffect":"src.data.scripts.weapons.TheNomadsSelfSustainedFusionTorpedoEffect",
 }

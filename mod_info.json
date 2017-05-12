@@ -4,6 +4,7 @@
   "id":"nomads",
 	"version":"1.0",
 	"description":"The Nomad Armada wanders about   , Updated to 0.8a per Snrasha",
-	"modPlugin":"data.scripts.TheNomadsModPlugin",
+  "modPlugin": "src.data.scripts.world.NAModPlugin",
+  "jars":["jars/NA.jar"],
   "gameVersion":"0.8a",
 }
