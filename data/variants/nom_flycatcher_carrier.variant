@@ -28,5 +28,8 @@
         "WS0006": "nom_firecracker"
       }
     }
-  ]
+  ],
+ "wings": [
+    "nom_iguana_wing","nom_scarab_wing"  ]
+}
 }
