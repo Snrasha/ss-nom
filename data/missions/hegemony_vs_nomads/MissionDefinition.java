@@ -1,6 +1,5 @@
 package data.missions.hegemony_vs_nomads;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.fleet.FleetGoal;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.mission.FleetSide;
@@ -9,6 +8,7 @@ import com.fs.starfarer.api.mission.MissionDefinitionPlugin;
 
 public class MissionDefinition implements MissionDefinitionPlugin
 {
+        @Override
 	public void defineMission(MissionDefinitionAPI api)
 	{
 		// Set up the fleets
@@ -87,11 +87,11 @@ public class MissionDefinition implements MissionDefinitionPlugin
 		api.addToFleet(FleetSide.PLAYER, "condor_Attack", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.PLAYER, "condor_Attack", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.PLAYER, "condor_Attack", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.PLAYER, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.PLAYER, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.PLAYER, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.PLAYER, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.PLAYER, "hound_Assault", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.PLAYER, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.PLAYER, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.PLAYER, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.PLAYER, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.PLAYER, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.PLAYER, "lasher_Assault", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.PLAYER, "lasher_Assault", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.PLAYER, "lasher_Assault", FleetMemberType.SHIP, true);

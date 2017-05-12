@@ -87,11 +87,11 @@ public class MissionDefinition implements MissionDefinitionPlugin
 		api.addToFleet(FleetSide.ENEMY, "condor_Attack", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.ENEMY, "condor_Attack", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.ENEMY, "condor_Attack", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.ENEMY, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.ENEMY, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.ENEMY, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.ENEMY, "hound_Assault", FleetMemberType.SHIP, true);
-		api.addToFleet(FleetSide.ENEMY, "hound_Assault", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.ENEMY, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.ENEMY, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.ENEMY, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.ENEMY, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
+		api.addToFleet(FleetSide.ENEMY, "hound_hegemony_Standard", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.ENEMY, "lasher_Assault", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.ENEMY, "lasher_Assault", FleetMemberType.SHIP, true);
 		api.addToFleet(FleetSide.ENEMY, "lasher_Assault", FleetMemberType.SHIP, true);
