@@ -59,16 +59,16 @@ public class TheNomadsNur {
     private void init_celestial_bodies(StarSystemAPI system) {
         // stars, planets and moons
         system_center_of_mass = system.createToken(0f, 0f);
-
-        star_A = system.addPlanet("nur_A", system_center_of_mass, "Nur-A", "star_blue", 90f, 1000f, 1500f, 30f);
-        star_B = system.addPlanet("nur_B", system_center_of_mass, "Nur-B", "star_red", 270f, 300f, 600f, 30f);
-        planet_I = system.addPlanet("nur_B", system_center_of_mass, "Naera", "desert", 45f, 300f, 8000f, 199f);
+        //PlanetAPI star = system.initStar("nur", StarTypes.NEUTRON_STAR, 50f, 40f);
+        star_A = system.addPlanet("nur_A", system_center_of_mass, "Nur-A", StarTypes.BLUE_GIANT, 90f, 1000f, 1500f, 30f);
+        star_B = system.addPlanet("nur_B", system_center_of_mass, "Nur-B", StarTypes.RED_GIANT, 270f, 300f, 600f, 30f);
+        planet_I = system.addPlanet("nur_C", system_center_of_mass, "Naera", "desert", 45f, 300f, 8000f, 199f);
         planet_I__moon_a = system.addPlanet("nur_D", planet_I, "Ixaith", "rocky_unstable", 0f, 60f, 800f, 67f);
-        planet_I__moon_b = system.addPlanet("nur_F", planet_I, "Ushaise", "rocky_ice", 45f, 45f, 1000f, 120f);
-        planet_I__moon_c = system.addPlanet("", planet_I, "Riaze", "barren", 90f, 100f, 1200f, 130f);
-        planet_I__moon_d = system.addPlanet("", planet_I, "Riaze-Tremn", "frozen", 135f, 35f, 1500f, 132f);
-        planet_I__moon_e = system.addPlanet("", planet_I, "Eufariz", "frozen", 180f, 65f, 1750f, 200f);
-        planet_I__moon_f = system.addPlanet("", planet_I, "Thumn", "rocky_ice", 225f, 100f, 2000f, 362f);
+        planet_I__moon_b = system.addPlanet("nur_E", planet_I, "Ushaise", "rocky_ice", 45f, 45f, 1000f, 120f);
+        planet_I__moon_c = system.addPlanet("nur_F", planet_I, "Riaze", "barren", 90f, 100f, 1200f, 130f);
+        planet_I__moon_d = system.addPlanet("nur_G", planet_I, "Riaze-Tremn", "frozen", 135f, 35f, 1500f, 132f);
+        planet_I__moon_e = system.addPlanet("nur_H", planet_I, "Eufariz", "frozen", 180f, 65f, 1750f, 200f);
+        planet_I__moon_f = system.addPlanet("nur_L", planet_I, "Thumn", "rocky_ice", 225f, 100f, 2000f, 362f);
 
         // specs
         planet_I.getSpec().setAtmosphereColor(new Color(160, 110, 45, 140));

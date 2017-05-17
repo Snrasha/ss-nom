@@ -1,5 +1,5 @@
 {
-	"starSystem":["nur_A", "nur_B"],
+	"starSystem":"nur_C",
 	"markets":[
 	{
 		"entities":["stationNom1"],
