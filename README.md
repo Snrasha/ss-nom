@@ -16,9 +16,29 @@ Music
 
 
 Snrasha update:
+Need to be made per community:
 
-Fighter :  tags,tier,rarity to made, range, attackrunrange,role desc
-Faction
-Ship
+Fighter : 
+- tags
+- tier
+- rarity
+- range
+- attackrunrange
+- role desc
+Faction :
+- Troop
+- Banner
+- custom
+- doctrine
+- traits
+Ship:
+- 8/6/5/4%
+- Others things link to supply/mo,...
 
-Faction have be filled with stuff of looters faction
+
+Need to be re-made per Snrasha/ Coders:
+-Unique Oasis. (Vanilla code : https://github.com/Trylobot/ss-nom)
+-Others things?
+
+
+Github Lighted Version:https://github.com/Snrasha/ss-nom
