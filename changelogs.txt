@@ -1,0 +1,5 @@
+1.01:
+Snrasha:
+-Retire my name on the description of the mod.
+-Up the collision radius of the rattlesnake for a problem of collision.
+-Add the Oasis fleet

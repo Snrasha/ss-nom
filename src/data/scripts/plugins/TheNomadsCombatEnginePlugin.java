@@ -66,12 +66,10 @@ public class TheNomadsCombatEnginePlugin implements CombatEnginePlugin, EveryFra
 
     @Override
     public void renderInWorldCoords(ViewportAPI vapi) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void renderInUICoords(ViewportAPI vapi) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 
