@@ -15,11 +15,19 @@
     -15,
     7.5
   ],
+  "builtInMods": [
+    "naeran_flux_shunts"
+  ],
+  "builtInWeapons": {
+    "left_gun": "nom_light_electron_maser",
+    "missile_1": "nom_self_sustained_fusion_torpedo_mini",
+    "right_gun": "nom_light_electron_maser"
+  },
   "center": [
     25.5,
     18
   ],
-  "collisionRadius": 29.004311,
+  "collisionRadius": 50,
   "engineSlots": [
     {
       "angle": 180,
@@ -149,10 +157,5 @@
       "type": "BUILT_IN"
     }
   ],
-  "width": 54,
-  "builtInWeapons": {
-    "left_gun": "nom_light_electron_maser",
-    "right_gun": "nom_light_electron_maser",
-    "missile_1": "nom_self_sustained_fusion_torpedo_mini",
-  },
+  "width": 54
 }

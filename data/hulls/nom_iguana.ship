@@ -1,79 +1,81 @@
 {
   "bounds": [
-    20.0,
-    2.0,
-    17.0,
+    20,
+    2,
+    17,
     -6.5,
-    -8.0,
+    -8,
     -15.5,
     -18.5,
-    -7.0,
+    -7,
     -15.5,
     10.5,
     -6.5,
-    16.0,
-    -1.0,
-    7.0,
+    16,
+    -1,
+    7,
     6.5,
     12.5
   ],
-  "center": [
-    17.0,
-    21.0
+  "builtInMods": [
+    "naeran_flux_shunts"
   ],
-  "collisionRadius": 34.7,
+  "center": [
+    17,
+    21
+  ],
+  "collisionRadius": 46,
   "engineSlots": [
     {
-      "angle": 180.0,
-      "contrailSize": 8.0,
+      "angle": 180,
+      "contrailSize": 8,
       "length": 40.5,
       "location": [
-        -21.0,
+        -21,
         -0.5
       ],
       "style": "ANCIENT_NAERAN",
-      "width": 8.0
+      "width": 8
     },
     {
-      "angle": 180.0,
-      "contrailSize": 7.0,
-      "length": 32.0,
+      "angle": 180,
+      "contrailSize": 7,
+      "length": 32,
       "location": [
-        -21.0,
+        -21,
         -6.5
       ],
       "style": "ANCIENT_NAERAN",
-      "width": 7.0
+      "width": 7
     },
     {
-      "angle": 180.0,
-      "contrailSize": 6.0,
+      "angle": 180,
+      "contrailSize": 6,
       "length": 17.5,
       "location": [
-        -20.0,
-        3.0
+        -20,
+        3
       ],
       "style": "ANCIENT_NAERAN",
-      "width": 6.0
+      "width": 6
     }
   ],
-  "height": 44.0,
-  "width": 34.0,
+  "height": 44,
   "hullId": "nom_iguana",
   "hullName": "Iguana",
   "hullSize": "FIGHTER",
   "shieldCenter": [
-    0.0,
-    0.0
+    0,
+    0
   ],
   "shieldRadius": 28.1,
   "spriteName": "graphics/nom/ships/nom_iguana.png",
   "style": "ANCIENT_NAERAN",
-  "viewOffset": 0.0,
+  "viewOffset": 0,
   "weaponSlots": [
     {
-      "angle": 23.2,
-      "arc": 335.3,
+      "angle": 23.200001,
+      "arc": 335.299988,
       "id": "WS 001",
       "locations": [
         1.5,
@@ -85,7 +87,7 @@
     },
     {
       "angle": -18.4,
-      "arc": 342.1,
+      "arc": 342.100006,
       "id": "WS 002",
       "locations": [
         11.5,
@@ -96,8 +98,5 @@
       "type": "ENERGY"
     }
   ],
-  "builtInWeapons": {
-    "WS 001": "nom_ultralight_electron_maser",
-    "WS 002": "nom_light_electron_maser"
-  },
+  "width": 34
 }

@@ -9,11 +9,14 @@
     3.5,
     8.5
   ],
+  "builtInMods": [
+    "naeran_flux_shunts"
+  ],
   "center": [
     11,
     11.5
   ],
-  "collisionRadius": 13.9,
+  "collisionRadius": 20.5,
   "engineSlots": [
     {
       "angle": 180,

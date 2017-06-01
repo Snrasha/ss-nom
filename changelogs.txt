@@ -1,5 +1,8 @@
 1.01:
 Snrasha:
 -Retire my name on the description of the mod.
--Up the collision radius of the rattlesnake for a problem of collision.
+-Up the collision radius of each ship.
 -Add the Oasis fleet
+-Fix hullmod when i have completely forgot.
+-Fix ship supply to deploy.
+-Fix OP, put main hullmod to build-in.

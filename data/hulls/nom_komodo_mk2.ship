@@ -61,6 +61,9 @@
     89,
     7
   ],
+  "builtInMods": [
+    "naeran_flux_shunts"
+  ],
   "builtInWeapons": {
     "PD1": "nom_firecracker",
     "PD2": "nom_firecracker",
@@ -77,7 +80,7 @@
     67,
     85
   ],
-  "collisionRadius": 122.188377,
+  "collisionRadius": 150,
   "engineSlots": [
     {
       "angle": 180,

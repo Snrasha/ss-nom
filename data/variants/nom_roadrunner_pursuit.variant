@@ -4,7 +4,6 @@
   "fluxVents": 10,
   "hullId": "nom_roadrunner",
   "hullMods": [
-    "naeran_flux_shunts",
     "fluxbreakers",
     "unstable_injector",
     "insulatedengine",

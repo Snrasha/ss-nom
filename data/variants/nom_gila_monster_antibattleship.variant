@@ -4,7 +4,6 @@
   "fluxVents": 15,
   "hullId": "nom_gila_monster",
   "hullMods": [
-    "naeran_flux_shunts",
     "fluxbreakers",
     "magazines"
   ],

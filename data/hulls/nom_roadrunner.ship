@@ -61,13 +61,24 @@
     5.5,
     -39
   ],
+  "builtInMods": [
+    "naeran_flux_shunts"
+  ],
+  "builtInWeapons": {
+    "WS0001": "nom_gamma_pulse_emp",
+    "WS0002": "nom_gamma_pulse_emp",
+    "WS0003": "nom_twin_electron_maser",
+    "WS0004": "nom_firecracker",
+    "WS0005": "nom_firecracker",
+    "WS0006": "nom_light_electron_maser",
+    "WS0007": "nom_light_electron_maser"
+  },
   "center": [
     69,
     102.5
   ],
-  "collisionRadius": 106.542244,
+  "collisionRadius": 168,
   "engineSlots": [
-    ### BIGGIE
     {
       "angle": 180,
       "contrailSize": 40,
@@ -79,7 +90,6 @@
       "style": "ANCIENT_NAERAN",
       "width": 50
     },
-    ### BIGGIE
     {
       "angle": 180,
       "contrailSize": 40,
@@ -211,7 +221,6 @@
       "size": "SMALL",
       "type": "BUILT_IN"
     },
-    ### drones pop out here
     {
       "angle": 0,
       "arc": 45,
@@ -224,7 +233,6 @@
       "size": "SMALL",
       "type": "SYSTEM"
     },
-    ### this is for the engine fx
     {
       "angle": 0,
       "arc": 0,
@@ -237,12 +245,10 @@
       "size": "LARGE",
       "type": "SYSTEM"
     },
-    ### there must be a separate anchor defined for each active damselfly drone
-    ### and the slots must be named according to the convention "tow_anchor_N"
     {
       "angle": 0,
       "arc": 0,
-      "id": "tow_anchor_0", # LEFT
+      "id": "tow_anchor_0",
       "locations": [
         38,
         47.5
@@ -254,7 +260,7 @@
     {
       "angle": 0,
       "arc": 0,
-      "id": "tow_anchor_1", # RIGHT
+      "id": "tow_anchor_1",
       "locations": [
         38,
         -47.5
@@ -262,19 +268,7 @@
       "mount": "HIDDEN",
       "size": "SMALL",
       "type": "SYSTEM"
-    },
+    }
   ],
-  "builtInWeapons": {
-    "WS0001": "nom_gamma_pulse_emp",
-    "WS0002": "nom_gamma_pulse_emp",
-    "WS0003": "nom_twin_electron_maser",
-    "WS0004": "nom_firecracker",
-    "WS0005": "nom_firecracker",
-    "WS0006": "nom_light_electron_maser",
-    "WS0007": "nom_light_electron_maser",
-    "engine_fx": "nom_roadrunner_engine_fx",
-    "tow_anchor_0": "nom_tow_cable_anchor",
-    "tow_anchor_1": "nom_tow_cable_anchor",
-  },
   "width": 138
 }

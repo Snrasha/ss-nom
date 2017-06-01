@@ -17,15 +17,16 @@ import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import java.util.Random;
 import src.data.scripts.campaign.CampaignArmada;
-import src.data.scripts.campaign.Nomad_CampaignSpawnSpecialFleet;
 
 public class Nomad_SpecialCampaignFleetAI implements Script {
 
     private SectorEntityToken hideoutLocation;
     private SectorEntityToken home;
+    private CampaignArmada armada;
+
 
     public Nomad_SpecialCampaignFleetAI(CampaignArmada armada) {
-        
+        this.armada=armada;
         this.home = Global.getSector().getEntityById("stationNom1");
         if (this.home == null) {
             Global.getSector().getEntityById("nur_C");
@@ -33,64 +34,62 @@ public class Nomad_SpecialCampaignFleetAI implements Script {
     }
 
     public void init() {
-
         LocationAPI location = this.home.getContainingLocation();
-        location.addEntity(Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet());
-        Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
+        location.addEntity(armada.getLeaderFleet());
+        armada.getLeaderFleet().setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
         Global.getSector().getCampaignUI().addMessage("Launch:Go on 2 " + this.home.getId());
-        Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 10f, this);
+        armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 5f, this);
 
-        Nomad_CampaignSpawnSpecialFleet.armada.setEscortFleets(spawnRoyalCommandFleet(), 0);
-       Nomad_CampaignSpawnSpecialFleet.armada.setEscortFleets(spawnRoyalGuardFleet(), 1);
-        Nomad_CampaignSpawnSpecialFleet.armada.setEscortFleets(spawnRoyalGuardFleet(), 2);
-        Nomad_CampaignSpawnSpecialFleet.armada.setEscortFleets(spawnAssassinFleet(), 3);
-       Nomad_CampaignSpawnSpecialFleet.armada.setEscortFleets(spawnScoutFleet(), 4);
-        Nomad_CampaignSpawnSpecialFleet.armada.setEscortFleets(spawnScoutFleet(), 5);
+        armada.setEscortFleets(spawnRoyalCommandFleet(), 0);
+        armada.setEscortFleets(spawnRoyalGuardFleet(), 1);
+        armada.setEscortFleets(spawnRoyalGuardFleet(), 2);
+        armada.setEscortFleets(spawnAssassinFleet(), 3);
+        armada.setEscortFleets(spawnScoutFleet(), 4);
+        armada.setEscortFleets(spawnScoutFleet(), 5);
 
-        for (CampaignFleetAPI escortFleet1 : Nomad_CampaignSpawnSpecialFleet.armada.getEscortFleets()) {
+        for (CampaignFleetAPI escortFleet1 : armada.getEscortFleets()) {
             location.addEntity(escortFleet1);
             escortFleet1.setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
         }
 
-        new Nomad_ScoutFleetAI( 0).init();
-        new Nomad_ScoutFleetAI(1).init();
-        new Nomad_ScoutFleetAI( 2).init();
-        new Nomad_ScoutFleetAI(3).init();
-        new Nomad_ScoutFleetAI(4).init();
-        new Nomad_ScoutFleetAI(5).init();
+        new Nomad_ScoutFleetAI(0,armada).init();
+        new Nomad_ScoutFleetAI(1,armada).init();
+        new Nomad_ScoutFleetAI(2,armada).init();
+        new Nomad_ScoutFleetAI(3,armada).init();
+        new Nomad_ScoutFleetAI(4,armada).init();
+        new Nomad_ScoutFleetAI(5,armada).init();
 
     }
 
     @Override
     public void run() {
+       /* if (armada.getLeaderFleet().getCurrentAssignment() != null) {
+            Global.getSector().getCampaignUI().addMessage("Ass " + armada.getLeaderFleet().getCurrentAssignment().getAssignment().name());
 
-        if(Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().getCurrentAssignment()!=null){
-                Global.getSector().getCampaignUI().addMessage("Ass " + Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().getCurrentAssignment().getAssignment().name());
-
-            if (Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().getCurrentAssignment().getAssignment() == FleetAssignment.ORBIT_PASSIVE) {
-            if (Nomad_CampaignSpawnSpecialFleet.armada.isEscortAlive(4)) {
-                Nomad_CampaignSpawnSpecialFleet.armada.getEscortFleets()[4].getCurrentAssignment().expire();
-                //armada.getEscortFleets()[4].getCurrentAssignment().getOnCompletion().run();
+            if (armada.getLeaderFleet().getCurrentAssignment().getAssignment() == FleetAssignment.ORBIT_PASSIVE) {
+                if (armada.isEscortAlive(4)) {
+                    armada.getEscortFleets()[4].getCurrentAssignment().expire();
+                    //armada.getEscortFleets()[4].getCurrentAssignment().getOnCompletion().run();
+                }
+                if (armada.isEscortAlive(5)) {
+                    armada.getEscortFleets()[5].getCurrentAssignment().expire();
+                    //armada.getEscortFleets()[4].getCurrentAssignment().getOnCompletion().run();
+                }
+                return;
             }
-            if (Nomad_CampaignSpawnSpecialFleet.armada.isEscortAlive(5)) {
-                Nomad_CampaignSpawnSpecialFleet.armada.getEscortFleets()[5].getCurrentAssignment().expire();
-                //armada.getEscortFleets()[4].getCurrentAssignment().getOnCompletion().run();
-            }
-            return;
-        }
-        }
-        pickHideoutLocation();
+        }*/
+        pickLocation();
         if (hideoutLocation == null) {
-            Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().getOrbitFocus(), 10f, this);
+              hideoutLocation = Global.getSector().getEntityById("stationNom1");
         }
         Global.getSector().getCampaignUI().addMessage("Run:Go on 2 " + hideoutLocation.getId());
-        Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().getAI().doNotAttack(Global.getSector().getPlayerFleet(), 10000f);
-       Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().addAssignment(FleetAssignment.GO_TO_LOCATION, hideoutLocation, 10000f, this);
-        Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, 10f, this);
+        armada.getLeaderFleet().getAI().doNotAttack(Global.getSector().getPlayerFleet(), 10000f);
+        armada.getLeaderFleet().addAssignment(FleetAssignment.GO_TO_LOCATION, hideoutLocation, 10000f, this);
+        armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, 5f, this);
 
     }
 
-    private void pickHideoutLocation() {
+    private void pickLocation() {
         WeightedRandomPicker<StarSystemAPI> systemPicker = new WeightedRandomPicker<StarSystemAPI>();
 
         for (StarSystemAPI system : Global.getSector().getStarSystems()) {

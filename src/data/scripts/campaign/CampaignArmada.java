@@ -10,6 +10,7 @@ public class CampaignArmada {
     private CampaignFleetAPI leaderFleet;
     private final CampaignFleetAPI[] escortFleet;
     private SectorEntityToken home;
+    private boolean goDespawn;
 
     public CampaignArmada(int sizeEscort) {
         this.escortFleet = new CampaignFleetAPI[sizeEscort];
@@ -17,6 +18,7 @@ public class CampaignArmada {
         if (this.home == null) {
             Global.getSector().getEntityById("nur_C");
         }
+        goDespawn=false;
     }
 
     public CampaignFleetAPI getLeaderFleet() {
@@ -40,6 +42,7 @@ public class CampaignArmada {
     }
 
     public void despawn() {
+             Global.getSector().getCampaignUI().addMessage("despawn");
 
         if (home == null) {
             if (this.leaderFleet != null) {
@@ -53,14 +56,45 @@ public class CampaignArmada {
         }
         if (this.leaderFleet != null) {
             this.leaderFleet.clearAssignments();
-            this.leaderFleet.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, this.home, 1000f);
+            this.leaderFleet.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, this.home, 10000f);
         }
         for (CampaignFleetAPI escortFleet1 : this.escortFleet) {
             if (escortFleet1 != null) {
                 escortFleet1.clearAssignments();
-                escortFleet1.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, this.home, 1000f);
+                escortFleet1.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, this.home, 10000f);
             }
         }
+         this.goDespawn=true;
+    }
+    public boolean isGoDespawn(){
+        Global.getSector().getCampaignUI().addMessage("godespawn");
+
+        return this.goDespawn;
+    }
+
+    public boolean isDespawn() {
+        Global.getSector().getCampaignUI().addMessage("despawn");
+
+        int despawn = 0;
+        if (this.leaderFleet == null) {
+            despawn++;
+        } else if (!this.leaderFleet.isAlive()) {
+            this.leaderFleet = null;
+            despawn++;
+        }
+        for (CampaignFleetAPI escortFleet1 : this.escortFleet) {
+            if (escortFleet1 == null) {
+                despawn++;
+            } else if (!escortFleet1.isAlive()) {
+                escortFleet1 = null;
+                despawn++;
+            }
+        }
+
+        if(despawn == (1 + this.escortFleet.length)){
+            this.goDespawn=false;
+            return true;
+        } else return false;
     }
 
     public boolean isEscortAlive(int index) {

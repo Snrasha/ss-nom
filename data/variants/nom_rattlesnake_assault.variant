@@ -4,7 +4,6 @@
   "fluxVents": 6,
   "hullId": "nom_rattlesnake",
   "hullMods": [
-    "naeran_flux_shunts",
     "heavyarmor",
     "fluxbreakers"
   ],

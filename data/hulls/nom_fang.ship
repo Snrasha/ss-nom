@@ -15,16 +15,18 @@
     -13.5,
     13.5
   ],
+  "builtInMods": [
+    "naeran_flux_shunts"
+  ],
   "builtInWeapons": {
     "gun": "nom_ultralight_electron_maser",
-    "missile": "nom_self_sustained_fusion_torpedo_mini",
-    "system": "nom_retribution_postmortem_launcher"
+    "missile": "nom_self_sustained_fusion_torpedo_mini"
   },
   "center": [
     28,
     18
   ],
-  "collisionRadius": 30.103987,
+  "collisionRadius": 50,
   "engineSlots": [
     {
       "angle": 180,
@@ -81,7 +83,6 @@
   ],
   "shieldRadius": 23.547823,
   "spriteName": "graphics/nom/ships/nom_fang.png",
-  #"spriteName": "graphics/nom/ships/nom_fang_empty.png", # switched programmatically
   "style": "ANCIENT_NAERAN",
   "viewOffset": 0,
   "weaponSlots": [

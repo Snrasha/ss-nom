@@ -4,7 +4,6 @@
   "fluxVents": 15,
   "hullId": "nom_sandstorm",
   "hullMods": [
-    "naeran_flux_shunts",
     "fluxbreakers",
     "targetingunit"
   ],

@@ -175,11 +175,21 @@
     232,
     59
   ],
+  "builtInMods": [
+    "biosphere",
+    "cloning_vats",
+    "automated_nanobot_fabricators",
+    "logistical_distribution_drones"
+  ],
+  "builtInWeapons": {
+    "WS_habitat_ring": "nom_decorative_oasis_habitat_ring",
+    "WS_support_beam": "nom_decorative_oasis_habitat_ring_structural_support_beam"
+  },
   "center": [
     134,
     455
   ],
-  "collisionRadius": 460.635437,
+  "collisionRadius": 650,
   "engineSlots": [
     {
       "angle": 180,
@@ -336,7 +346,6 @@
       "width": 7
     }
   ],
-  "width": 288,
   "height": 880,
   "hullId": "nom_oasis",
   "hullName": "Oasis",
@@ -375,14 +384,5 @@
       "type": "DECORATIVE"
     }
   ],
-  "builtInWeapons":{
-    "WS_habitat_ring": "nom_decorative_oasis_habitat_ring",
-    "WS_support_beam": "nom_decorative_oasis_habitat_ring_structural_support_beam",
-  },
-  "builtInMods":[
-    "biosphere",
-    "cloning_vats",
-    "automated_nanobot_fabricators",
-    "logistical_distribution_drones",
-  ]
+  "width": 288
 }

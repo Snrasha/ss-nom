@@ -2,27 +2,55 @@ package src.data.scripts.campaign.AI;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
+import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetAssignment;
 import src.data.scripts.campaign.CampaignArmada;
-import src.data.scripts.campaign.Nomad_CampaignSpawnSpecialFleet;
 
 public class Nomad_ScoutFleetAI implements Script {
 
     private final int identity;
+    private CampaignArmada armada;
 
-    public Nomad_ScoutFleetAI(int index) {
+    public Nomad_ScoutFleetAI(int index, CampaignArmada armada) {
         this.identity = index;
+        this.armada = armada;
     }
 
     public void init() {
-       Nomad_CampaignSpawnSpecialFleet.armada.getEscortFleets()[this.identity].addAssignment(FleetAssignment.FOLLOW, Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet(), 10000f, this);
+        armada.getEscortFleets()[this.identity].addAssignment(FleetAssignment.ORBIT_AGGRESSIVE, armada.getLeaderFleet(), 2f, this);
     }
 
     @Override
     public void run() {
-        Global.getSector().getCampaignUI().addMessage("Assi scout" + this.identity);
-       Nomad_CampaignSpawnSpecialFleet.armada.getEscortFleets()[this.identity].addAssignment(FleetAssignment.PATROL_SYSTEM,Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet(), 10f);
-        Nomad_CampaignSpawnSpecialFleet.armada.getEscortFleets()[this.identity].addAssignment(FleetAssignment.FOLLOW, Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet(), 10000f);
+
+        CampaignFleetAPI fleet = armada.getEscortFleets()[this.identity];
+        CampaignFleetAPI chief = armada.getLeaderFleet();
+        if (chief == null) {
+            if (!armada.isGoDespawn()) {
+                armada.despawn();
+
+            }
+            return;
+        }
+        if (chief.getCurrentAssignment() == null) {
+            fleet.addAssignment(FleetAssignment.DEFEND_LOCATION, armada.getLeaderFleet(), 2f, this);
+            Global.getSector().getCampaignUI().addMessage("DEFEND_LOCATION" + this.identity);
+
+        }
+
+        if (chief.getCurrentAssignment().getAssignment().equals(FleetAssignment.ORBIT_PASSIVE)) {
+            if (identity >= 4) {
+                Global.getSector().getCampaignUI().addMessage("PATROL_SYSTEM" + this.identity);
+                fleet.addAssignment(FleetAssignment.PATROL_SYSTEM, armada.getLeaderFleet(), 2f, this);
+            } else {
+                Global.getSector().getCampaignUI().addMessage("ORBIT_AGGRESSIVE" + this.identity);
+                fleet.addAssignment(FleetAssignment.ORBIT_AGGRESSIVE, armada.getLeaderFleet(), 2f, this);
+            }
+        }
+        if (chief.getCurrentAssignment().getAssignment().equals(FleetAssignment.PATROL_SYSTEM)) {
+            Global.getSector().getCampaignUI().addMessage("DEFEND_LOCATION" + this.identity);
+            fleet.addAssignment(FleetAssignment.DEFEND_LOCATION, armada.getLeaderFleet(), 2f, this);
+        }
     }
 
 }

@@ -5,7 +5,6 @@
 	"fluxVents":0,
 	"fluxCapacitors":0,
 	"hullMods":[
-		"naeran_flux_shunts",
 	],
 	"weaponGroups":[{
 		"mode":"LINKED",

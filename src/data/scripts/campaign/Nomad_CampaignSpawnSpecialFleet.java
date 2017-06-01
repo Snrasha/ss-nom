@@ -16,7 +16,7 @@ import src.data.scripts.campaign.AI.Nomad_SpecialCampaignFleetAI;
 
 public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
-    public static final CampaignArmada armada = new CampaignArmada(6);
+    private final CampaignArmada armada = new CampaignArmada(6);
     private final IntervalUtil timerrespawn;
     private PersonAPI person;
     private boolean oneTime = false;
@@ -56,14 +56,14 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
         this.timerrespawn.advance(Global.getSector().getClock().convertToMonths(amount));
 
         if (this.timerrespawn.intervalElapsed()) {
-            if (Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet() == null) {
-                
+            
+            
+            if (armada.isDespawn()) {
+   
                 spawnFleet();
-            } else if (!Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().isAlive() || !Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis")) {
-                Nomad_CampaignSpawnSpecialFleet.armada.despawn();
-            }
-            if (Nomad_CampaignSpawnSpecialFleet.armada.getLeaderFleet() == null) {
-                spawnFleet();
+            } else if (armada.getLeaderFleet()==null || !armada.getLeaderFleet().isAlive() || !armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis")) {
+
+                armada.despawn();
             }
 
         }
@@ -103,11 +103,10 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
         }
 
         FleetFactory.finishAndSync(fleet);
-        Nomad_CampaignSpawnSpecialFleet.armada.setLeaderFleet(fleet);
-        Nomad_SpecialCampaignFleetAI nomad_scriptFleet = new Nomad_SpecialCampaignFleetAI(Nomad_CampaignSpawnSpecialFleet.armada);
+        armada.setLeaderFleet(fleet);
+        Nomad_SpecialCampaignFleetAI nomad_scriptFleet = new Nomad_SpecialCampaignFleetAI(armada);
         nomad_scriptFleet.init();
 
     }
-
 
 }

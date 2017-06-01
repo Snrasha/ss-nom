@@ -9,11 +9,14 @@
     -2.5,
     7
   ],
+  "builtInMods": [
+    "naeran_flux_shunts"
+  ],
   "center": [
     9,
     12
   ],
-  "collisionRadius": 14.008925,
+  "collisionRadius": 18,
   "engineSlots": [
     {
       "angle": 180,
@@ -61,17 +64,19 @@
   "spriteName": "graphics/nom/ships/nom_damselfly.png",
   "style": "ANCIENT_NAERAN",
   "viewOffset": 0,
-  "weaponSlots": [{
-    "angle":0,
-    "arc":360,
-    "id":"TOW_CABLE",
-    "locations":[0,0],
-    "mount":"TURRET",
-    "size":"SMALL",
-    "type":"SYSTEM"
-  }],
-  "width": 19,
-  "builtInWeapons":{
-    "TOW_CABLE":"nom_damselfly_tow_cable"
-  }
+  "weaponSlots": [
+    {
+      "angle": 0,
+      "arc": 360,
+      "id": "TOW_CABLE",
+      "locations": [
+        0,
+        0
+      ],
+      "mount": "TURRET",
+      "size": "SMALL",
+      "type": "SYSTEM"
+    }
+  ],
+  "width": 19
 }

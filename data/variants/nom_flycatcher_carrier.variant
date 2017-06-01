@@ -4,7 +4,6 @@
   "fluxVents": 4,
   "hullId": "nom_flycatcher",
   "hullMods": [
-    "naeran_flux_shunts",
     "insulatedengine",
     "augmentedengines"
   ],
