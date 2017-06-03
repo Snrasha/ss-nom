@@ -18,7 +18,7 @@ import src.data.scripts.campaign.AI.Nomad_SpecialCampaignFleetAI;
 
 public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
-    private final CampaignArmada armada = new CampaignArmada(3);
+    private final Nomad_CampaignArmada armada = new Nomad_CampaignArmada(3);
     private final IntervalUtil timerrespawn;
     private PersonAPI person;
     private boolean oneTime = false;
@@ -27,7 +27,6 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
     public Nomad_CampaignSpawnSpecialFleet() {
 
         this.person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 20);
-        // this.timerMonth = Global.getSector().getClock().getMonth(); // Launched the next month
         timerrespawn = new IntervalUtil(3, 3);
 
         oneTime = false;
@@ -57,12 +56,12 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
             oneTime = true;
             spawnFleet();
         }
-        this.timerrespawn.advance(Global.getSector().getClock().convertToMonths(amount));
+        this.timerrespawn.advance(Global.getSector().getClock().convertToDays(amount));
 
         if (this.timerrespawn.intervalElapsed()) {
 
             if (armada.isDespawn()) {
-                if (cooldown > 3) {
+                if (cooldown > 30) {
                     cooldown = 0;
                     retireOasis();
                     spawnFleet();
@@ -70,10 +69,15 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
                 cooldown++;
             } else if (armada.getLeaderFleet() == null || !armada.getLeaderFleet().isAlive() || !armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis")) {
+
                 insertOasis();
                 armada.despawn();
+            } else if (!armada.isGoDespawn()) {
+                int scoutalive = armada.isScoutNull();
+                if (scoutalive != -1) {
+                    armada.respawnScout(scoutalive);
+                }
             }
-
         }
 
     }

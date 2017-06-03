@@ -4,73 +4,167 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetAssignment;
-import com.fs.starfarer.api.campaign.FleetDataAPI;
+
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.fleet.FleetMemberType;
-import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
-import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
+import com.fs.starfarer.api.campaign.events.CampaignEventManagerAPI;
+import com.fs.starfarer.api.campaign.events.CampaignEventTarget;
+
+import com.fs.starfarer.api.impl.campaign.ids.Events;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
-import java.util.List;
-import java.util.Random;
-import src.data.scripts.campaign.CampaignArmada;
+
+import src.data.scripts.campaign.Nomad_CampaignArmada;
+import src.data.scripts.campaign.Nomad_SpecialFactory;
 
 public class Nomad_SpecialCampaignFleetAI implements Script {
 
     private SectorEntityToken hideoutLocation;
     private final SectorEntityToken home;
-    private CampaignArmada armada;
+    private Nomad_CampaignArmada armada;
 
-    public Nomad_SpecialCampaignFleetAI(CampaignArmada armada) {
+    public Nomad_SpecialCampaignFleetAI(Nomad_CampaignArmada armada) {
         this.armada = armada;
-        this.home = Global.getSector().getEntityById("stationNom1");
-        if (this.home == null) {
-            Global.getSector().getEntityById("nur_C");
-        }
+        this.home = this.armada.getHome();
+
     }
 
     public void init() {
         LocationAPI location = this.home.getContainingLocation();
-        location.addEntity(this.armada.getLeaderFleet());
-        this.armada.getLeaderFleet().setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
+        CampaignFleetAPI chief = this.armada.getLeaderFleet();
+        location.addEntity(chief);
+
+        chief.setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
         Global.getSector().getCampaignUI().addMessage("Launch:Go on 2 " + this.home.getId());
-        this.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 5f, this);
+        chief.addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 5f, this);
 
-        this.armada.setEscortFleets(spawnRoyalCommandFleet(), 0);
-        /*this.armada.setEscortFleets(spawnRoyalGuardFleet(), 1);
-        this.armada.setEscortFleets(spawnRoyalGuardFleet(), 2);
-        this.armada.setEscortFleets(spawnAssassinFleet(), 3);*/
-        this.armada.setEscortFleets(spawnScoutFleet(), 1);
-        this.armada.setEscortFleets(spawnScoutFleet(), 2);
+        Nomad_SpecialFactory factory = armada.getFactory();
 
-        for (CampaignFleetAPI escortFleet1 : this.armada.getEscortFleets()) {
-            location.addEntity(escortFleet1);
-            escortFleet1.setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
-        }
+        this.armada.setEscortFleets(factory.spawnRoyalCommandFleet(chief), 0);
+        this.armada.setEscortFleets(factory.spawnScoutFleet(chief), 1);
+        this.armada.setEscortFleets(factory.spawnScoutFleet(chief), 2);
+
         Nomad_Escort aiescort = new Nomad_Escort(this.armada);
-        aiescort.run(hideoutLocation);
+        aiescort.run(hideoutLocation, 5);
     }
 
     @Override
     public void run() {
-        pickLocation();
+        pickLocation(this.armada.getLeaderFleet());
         if (this.hideoutLocation == null) {
             this.hideoutLocation = Global.getSector().getEntityById("stationNom1");
         }
+        int duration = 10;
         Global.getSector().getCampaignUI().addMessage("Run:Go on " + hideoutLocation.getId());
         this.armada.getLeaderFleet().getAI().doNotAttack(Global.getSector().getPlayerFleet(), 10000f);
         this.armada.getLeaderFleet().addAssignment(FleetAssignment.GO_TO_LOCATION, hideoutLocation, 10000f, this);
-        this.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, 10f, this);
+        this.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, duration, this);
 
         Nomad_Escort aiescort = new Nomad_Escort(this.armada);
-        aiescort.run(hideoutLocation);
+        aiescort.run(hideoutLocation, duration);
     }
 
+    private void pickLocation(CampaignFleetAPI fleet) {
+        WeightedRandomPicker<MarketAPI> picker = new WeightedRandomPicker<MarketAPI>();
+
+        CampaignEventManagerAPI eventManager = Global.getSector().getEventManager();
+
+        for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
+            //if (market.getFactionId().equals(Factions.PIRATES)) continue;
+            if (fleet.getFaction().isHostileTo(market.getFaction())) {
+                continue;
+            }
+            if (market.getStarSystem() == null || market.getStarSystem().hasTag(Tags.THEME_REMNANT) || market.getStarSystem().hasTag(Tags.THEME_DERELICT)) {
+                continue;
+            }
+            if (eventManager.isOngoing(new CampaignEventTarget(market), Events.PERSON_BOUNTY)) {
+                continue;
+            }
+            float dist = Misc.getDistance(market.getLocationInHyperspace(), fleet.getLocationInHyperspace());
+
+            float weight = Math.max(0, 500000f - dist);
+
+            picker.add(market, weight);
+        }
+        MarketAPI market = picker.pick();
+        if (market == null) {
+            hideoutLocation = this.home;
+            return;
+        }
+        StarSystemAPI system = market.getStarSystem();
+        if (system != null) {
+            WeightedRandomPicker<SectorEntityToken> picker2 = new WeightedRandomPicker<SectorEntityToken>();
+            for (SectorEntityToken planet : system.getPlanets()) {
+                if (planet.isStar()) {
+                    continue;
+                }
+                picker2.add(planet);
+            }
+            hideoutLocation = picker2.pick();
+        }
+    }
+    /*
+    private void pickLocationold() {
+        WeightedRandomPicker<StarSystemAPI> systemPicker = new WeightedRandomPicker<StarSystemAPI>();
+
+        for (StarSystemAPI system : Global.getSector().getStarSystems()) {
+            float weight = system.getPlanets().size();
+            float mult = 0f;
+
+            if (system.hasPulsar()) {
+                continue;
+            }
+
+            if (system.hasTag(Tags.THEME_MISC_SKIP)) {
+                mult = 1f;
+            }
+            if (system.hasTag(Tags.THEME_RUINS_SECONDARY)) {
+                mult = 1f;
+            }
+            if (system.hasTag(Tags.THEME_RUINS_MAIN)) {
+                mult = 1f;
+            }
+            if (system.hasTag(Tags.THEME_DERELICT)) {
+                mult = 0f;
+            }
+            if (system.hasTag(Tags.THEME_REMNANT)) {
+                mult = 0f;
+            }
+            if (system.) else if (system.hasTag(Tags.THEME_MISC)) {
+                mult = 3f;
+            } else if (system.hasTag(Tags.THEME_RUINS)) {
+                mult = 7f;
+            } else if (system.hasTag(Tags.THEME_REMNANT_DESTROYED)) {
+                mult = 3f;
+            }  {
+                if (mult <= 0) {
+                    continue;
+                }
+            }
+            float dist = system.getLocation().length();
+            float distMult = Math.max(0, 500000f - dist);
+
+            systemPicker.add(system, weight * mult * distMult);
+        }
+
+        StarSystemAPI system = systemPicker.pick();
+
+        if (system != null) {
+            WeightedRandomPicker<SectorEntityToken> picker = new WeightedRandomPicker<SectorEntityToken>();
+            for (SectorEntityToken planet : system.getPlanets()) {
+                if (planet.isStar()) {
+                    continue;
+                }
+                picker.add(planet);
+            }
+            hideoutLocation = picker.pick();
+        }
+
+    }*/
+ /*
     private void pickLocation() {
         WeightedRandomPicker<MarketAPI> systemPicker = new WeightedRandomPicker<MarketAPI>();
         List<MarketAPI> markets = Global.getSector().getEconomy().getMarketsCopy();
@@ -83,195 +177,17 @@ public class Nomad_SpecialCampaignFleetAI implements Script {
             float weight = market.getSize();
             float mult = 0f;
             float dist = market.getStarSystem().getLocation().length();
-            float distMult = Math.max(0, 50000f - dist);
+            float distMult = Math.max(0, 100000f - dist);
 
             systemPicker.add(market, weight * mult * distMult);
         }
 
         MarketAPI market = systemPicker.pick();
-        int flag = 0;
-        while (market == null || flag < 10) {
-            market = systemPicker.pick();
-            flag++;
-        }
         if (market == null) {
             hideoutLocation = this.home;
         }
-        hideoutLocation = market.getPrimaryEntity();
+        else hideoutLocation = market.getPrimaryEntity();
 
-    }
+    }*/
 
-    private CampaignFleetAPI spawnRoyalCommandFleet() {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Royal Command Fleet", true);
-
-        FleetDataAPI data = fleet.getFleetData();
-
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_gila_monster_antibattleship");
-        member.setShipName("Royal Commander Ship");
-        member.setFlagship(true);
-
-        PersonAPI person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 20);
-
-        member.setCaptain(person);
-        data.addFleetMember(member);
-
-        this.addRandom(data,
-                new String[]{
-                    "nom_sandstorm_assault",
-                    "nom_rattlesnake_assault",
-                    "nom_scorpion_assault",
-                    "nom_komodo_mk2_assault",
-                    "nom_komodo_assault",
-                    "nom_roadrunner_pursuit",
-                    "nom_flycatcher_carrier",
-                    "nom_death_bloom_strike",
-                    "nom_yellowjacket_sniper"
-                },
-                new int[]{
-                    3,
-                    5,
-                    2,
-                    2,
-                    5,
-                    2,
-                    2,
-                    3,
-                    4
-                },
-                28,
-                180);
-
-        FleetFactory.finishAndSync(fleet);
-        return fleet;
-    }
-
-    private CampaignFleetAPI spawnScoutFleet() {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Scout Fleet", true);
-
-        FleetDataAPI data = fleet.getFleetData();
-
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_flycatcher_carrier");
-        member.setShipName("Scout Leader Ship");
-        member.setFlagship(true);
-
-        PersonAPI person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 5);
-
-        member.setCaptain(person);
-        data.addFleetMember(member);
-
-        this.addRandom(data,
-                new String[]{
-                    "nom_wurm_assault",
-                    "nom_yellowjacket_sniper"
-                },
-                new int[]{
-                    1,
-                    1,},
-                2,
-                20);
-
-        FleetFactory.finishAndSync(fleet);
-        return fleet;
-    }
-
-    private CampaignFleetAPI spawnAssassinFleet() {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Assassin Fleet", true);
-
-        FleetDataAPI data = fleet.getFleetData();
-
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_death_bloom_strike");
-        member.setShipName("Assissin Leader Ship");
-        member.setFlagship(true);
-
-        PersonAPI person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 10);
-
-        member.setCaptain(person);
-        data.addFleetMember(member);
-
-        this.addRandom(data,
-                new String[]{
-                    "nom_roadrunner_pursuit",
-                    "nom_death_bloom_strike",},
-                new int[]{
-                    1,
-                    1
-                },
-                2,
-                38);
-
-        FleetFactory.finishAndSync(fleet);
-        return fleet;
-    }
-
-    private CampaignFleetAPI spawnRoyalGuardFleet() {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Royal Guard Fleet", true);
-
-        FleetDataAPI data = fleet.getFleetData();
-
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_sandstorm_assault");
-        member.setShipName("Royal Guard Ship");
-        member.setFlagship(true);
-
-        PersonAPI person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 15);
-
-        member.setCaptain(person);
-        data.addFleetMember(member);
-
-        this.addRandom(data,
-                new String[]{
-                    "nom_rattlesnake_assault",
-                    "nom_scorpion_assault",
-                    "nom_komodo_mk2_assault",
-                    "nom_komodo_assault",
-                    "nom_roadrunner_pursuit",
-                    "nom_flycatcher_carrier",
-                    "nom_death_bloom_strike",
-                    "nom_yellowjacket_sniper",
-                    "nom_wurm_assault"
-                },
-                new int[]{
-                    1,
-                    2,
-                    1,
-                    3,
-                    1,
-                    2,
-                    1,
-                    4,
-                    6
-                },
-                21,
-                75);
-
-        FleetFactory.finishAndSync(fleet);
-        return fleet;
-    }
-
-    private void addRandom(FleetDataAPI data, String[] members, int[] weight, int weightsize, int fleetPoints) {
-
-        int max = fleetPoints / 6;
-        Random rander = new Random();
-        int rand;
-        int index;
-        FleetMemberAPI ship;
-
-        while (fleetPoints > max) {
-            rand = rander.nextInt(weightsize);
-
-            index = 0;
-            while (rand > weight[index]) {
-                rand -= weight[index];
-                if (index == (weight.length - 1)) {
-                    break;
-                }
-                index++;
-            }
-            ship = Global.getFactory().createFleetMember(FleetMemberType.SHIP, members[index]);
-            fleetPoints -= ship.getFleetPointCost();
-            if (fleetPoints < 0) {
-                return;
-            }
-            data.addFleetMember(ship);
-        }
-    }
 }

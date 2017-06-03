@@ -7,24 +7,24 @@ package src.data.scripts.campaign.AI;
 
 import com.fs.starfarer.api.campaign.FleetAssignment;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import src.data.scripts.campaign.CampaignArmada;
+import src.data.scripts.campaign.Nomad_CampaignArmada;
 
 public class Nomad_Escort {
 
-    private CampaignArmada armada;
+    private Nomad_CampaignArmada armada;
 
-    public Nomad_Escort(CampaignArmada armada) {
+    public Nomad_Escort(Nomad_CampaignArmada armada) {
         this.armada = armada;
     }
 
-    public void run(SectorEntityToken location) {
+    public void run(SectorEntityToken location, int duration) {
         for (int i = 0; i < this.armada.getEscortFleets().length; i++) {
             this.armada.getEscortFleets()[i].clearAssignments();
             this.armada.getEscortFleets()[i].addAssignment(FleetAssignment.GO_TO_LOCATION, location, 10000f);
             if (i == 0) {
-                this.armada.getEscortFleets()[i].addAssignment(FleetAssignment.ORBIT_AGGRESSIVE, location, 10f);
+                this.armada.getEscortFleets()[i].addAssignment(FleetAssignment.ORBIT_AGGRESSIVE, location, duration);
             }
-            this.armada.getEscortFleets()[i].addAssignment(FleetAssignment.PATROL_SYSTEM, location, 10f);
+            this.armada.getEscortFleets()[i].addAssignment(FleetAssignment.PATROL_SYSTEM, location, duration);
         }
     }
 /*
