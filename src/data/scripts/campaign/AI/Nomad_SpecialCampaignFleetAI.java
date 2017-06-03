@@ -74,7 +74,7 @@ public class Nomad_SpecialCampaignFleetAI implements Script {
 
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
             //if (market.getFactionId().equals(Factions.PIRATES)) continue;
-            if (fleet.getFaction().isHostileTo(market.getFaction())) {
+            if (fleet.getFaction().getRelationship(market.getFaction().getId())<0f) {
                 continue;
             }
             if (market.getStarSystem() == null || market.getStarSystem().hasTag(Tags.THEME_REMNANT) || market.getStarSystem().hasTag(Tags.THEME_DERELICT)) {

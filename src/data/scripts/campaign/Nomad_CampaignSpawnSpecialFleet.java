@@ -3,7 +3,6 @@ package src.data.scripts.campaign;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -11,24 +10,21 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
-import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
 import com.fs.starfarer.api.util.IntervalUtil;
 import java.util.Iterator;
 import src.data.scripts.campaign.AI.Nomad_SpecialCampaignFleetAI;
 
 public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
-    private final Nomad_CampaignArmada armada = new Nomad_CampaignArmada(3);
+    private final Nomad_CampaignArmada armada;
     private final IntervalUtil timerrespawn;
-    private PersonAPI person;
     private boolean oneTime = false;
     private int cooldown = 0;
 
     public Nomad_CampaignSpawnSpecialFleet() {
 
-        this.person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 20);
         timerrespawn = new IntervalUtil(3, 3);
-
+        armada = new Nomad_CampaignArmada(3);
         oneTime = false;
 
     }
@@ -82,43 +78,10 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
     }
 
-    /**
-     * No random ship
-     */
     private void spawnFleet() {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Colony Fleet", true);
-
-        FleetDataAPI data = fleet.getFleetData();
-
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_oasis_standard");
-        member.setShipName("Oasis");
-        member.setFlagship(true);
-
-        if (person == null) {
-            this.person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 20);
-        }
-        member.setCaptain(person);
-        data.addFleetMember(member);
-
-        String[] members = {
-            "nom_sandstorm_assault",
-            "nom_sandstorm_assault",
-            "nom_rattlesnake_assault",
-            "nom_rattlesnake_assault",
-            "nom_komodo_mk2_assault",
-            "nom_komodo_mk2_assault",
-            "nom_flycatcher_carrier",
-            "nom_flycatcher_carrier",};
-
-        for (String ship : members) {
-            data.addFleetMember(Global.getFactory().createFleetMember(FleetMemberType.SHIP, ship));
-        }
-
-        FleetFactory.finishAndSync(fleet);
-        armada.setLeaderFleet(fleet);
+        armada.setLeaderFleet(armada.getFactory().spawnFleet());
         Nomad_SpecialCampaignFleetAI nomad_scriptFleet = new Nomad_SpecialCampaignFleetAI(armada);
         nomad_scriptFleet.init();
-
     }
 
     private void insertOasis() {

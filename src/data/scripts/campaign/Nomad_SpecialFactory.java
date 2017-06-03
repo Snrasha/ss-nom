@@ -9,14 +9,21 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
+import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV2;
 import java.util.Random;
 
 public class Nomad_SpecialFactory {
-    
-    
+
+    /*   
+		"nom_flycatcher_toad"
+        	"nom_flycatcher_scarab"
+		"nom_flycatcher_iguana"
+		"nom_flycatcher_fang"
+     */
+    private final String nameFaction = "nomads_oasis";
 
     public CampaignFleetAPI spawnRoyalCommandFleet(CampaignFleetAPI chief) {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Royal Command Fleet", true);
+        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Royal Command Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
 
@@ -37,7 +44,8 @@ public class Nomad_SpecialFactory {
                     "nom_komodo_mk2_assault",
                     "nom_komodo_assault",
                     "nom_roadrunner_pursuit",
-                    "nom_flycatcher_carrier",
+                    "nom_flycatcher_scarab",
+                    "nom_flycatcher_iguana",
                     "nom_death_bloom_strike",
                     "nom_yellowjacket_sniper"
                 },
@@ -48,25 +56,27 @@ public class Nomad_SpecialFactory {
                     2,
                     5,
                     2,
-                    2,
+                    1,
+                    1,
                     3,
-                    4
-                },
+                    4,},
                 28,
-                180);
+                180,
+                20
+        );
 
         FleetFactory.finishAndSync(fleet);
-        
+
         this.putLocation(chief, fleet);
         return fleet;
     }
 
     public CampaignFleetAPI spawnScoutFleet(CampaignFleetAPI chief) {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Scout Fleet", true);
+        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Scout Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
 
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_flycatcher_carrier");
+        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_flycatcher_fang");
         member.setShipName("Scout Leader Ship");
         member.setFlagship(true);
 
@@ -84,16 +94,16 @@ public class Nomad_SpecialFactory {
                     1,
                     1,},
                 2,
-                20);
+                20, 5);
 
         FleetFactory.finishAndSync(fleet);
-              
+
         this.putLocation(chief, fleet);
         return fleet;
     }
 
     public CampaignFleetAPI spawnAssassinFleet(CampaignFleetAPI chief) {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Assassin Fleet", true);
+        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Assassin Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
 
@@ -115,16 +125,16 @@ public class Nomad_SpecialFactory {
                     1
                 },
                 2,
-                38);
+                38, 10);
 
         FleetFactory.finishAndSync(fleet);
-              
+
         this.putLocation(chief, fleet);
         return fleet;
     }
 
     public CampaignFleetAPI spawnRoyalGuardFleet(CampaignFleetAPI chief) {
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet("nomads", "Royal Guard Fleet", true);
+        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Royal Guard Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
 
@@ -144,7 +154,8 @@ public class Nomad_SpecialFactory {
                     "nom_komodo_mk2_assault",
                     "nom_komodo_assault",
                     "nom_roadrunner_pursuit",
-                    "nom_flycatcher_carrier",
+                    "nom_flycatcher_toad",
+                    "nom_flycatcher_fang",
                     "nom_death_bloom_strike",
                     "nom_yellowjacket_sniper",
                     "nom_wurm_assault"
@@ -155,28 +166,84 @@ public class Nomad_SpecialFactory {
                     1,
                     3,
                     1,
-                    2,
+                    1,
+                    1,
                     1,
                     4,
                     6
                 },
                 21,
-                75);
+                75,
+                15
+        );
 
         FleetFactory.finishAndSync(fleet);
-              
+
         this.putLocation(chief, fleet);
         return fleet;
     }
 
-    private void putLocation(CampaignFleetAPI chief,CampaignFleetAPI newFleet) {
+    public CampaignFleetAPI spawnFleet() {
+        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Colony Fleet", true);
+
+        FleetDataAPI data = fleet.getFleetData();
+
+        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_oasis_standard");
+        member.setShipName("Oasis");
+        member.setFlagship(true);
+
+        PersonAPI person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 20);
+
+        member.setCaptain(person);
+        data.addFleetMember(member);
+        /*
+        String[] members = {
+            "nom_sandstorm_assault",
+            "nom_sandstorm_assault",
+            "nom_rattlesnake_assault",
+            "nom_rattlesnake_assault",
+            "nom_komodo_mk2_assault",
+            "nom_komodo_mk2_assault",};
+               for (String ship : members) {
+            data.addFleetMember(Global.getFactory().createFleetMember(FleetMemberType.SHIP, ship));
+        }
+         */
+        this.addRandom(data,
+                new String[]{
+                    "nom_sandstorm_assault",
+                    "nom_rattlesnake_assault",
+                    "nom_komodo_mk2_assault",
+                    "nom_flycatcher_toad",
+                    "nom_flycatcher_scarab",
+                    "nom_flycatcher_iguana",
+                    "nom_flycatcher_fang",},
+                new int[]{
+                    4,
+                    4,
+                    4,
+                    1,
+                    1,
+                    1,
+                    1
+                },
+                16,
+                180,
+                20
+        );
+      /*  Random random = new Random();
+        FleetFactoryV2.addCommanderAndOfficers(3, 15, 20, fleet, person, random);*/
+        FleetFactory.finishAndSync(fleet);
+        return fleet;
+    }
+
+    private void putLocation(CampaignFleetAPI chief, CampaignFleetAPI newFleet) {
         LocationAPI location = chief.getContainingLocation();
-        
+
         location.addEntity(newFleet);
         newFleet.setLocation(chief.getLocation().x, chief.getLocation().y);
     }
 
-    private void addRandom(FleetDataAPI data, String[] members, int[] weight, int weightsize, int fleetPoints) {
+    private void addRandom(FleetDataAPI data, String[] members, int[] weight, int weightsize, int fleetPoints, int maxlevelOfficer) {
 
         int max = fleetPoints / 6;
         Random rander = new Random();
@@ -197,6 +264,7 @@ public class Nomad_SpecialFactory {
             }
             ship = Global.getFactory().createFleetMember(FleetMemberType.SHIP, members[index]);
             fleetPoints -= ship.getFleetPointCost();
+
             if (fleetPoints < 0) {
                 return;
             }

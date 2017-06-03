@@ -86,14 +86,11 @@ public class Nomad_CampaignArmada {
     }
 
     public boolean isGoDespawn() {
-        Global.getSector().getCampaignUI().addMessage("godespawn");
 
         return this.goDespawn;
     }
 
     public boolean isDespawn() {
-        Global.getSector().getCampaignUI().addMessage("despawn");
-
         int despawn = 0;
         if (this.leaderFleet == null) {
             despawn++;
