@@ -6,10 +6,8 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
-import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.util.IntervalUtil;
 import java.util.Iterator;
 import src.data.scripts.campaign.AI.Nomad_SpecialCampaignFleetAI;
@@ -69,9 +67,9 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
                 insertOasis();
                 armada.despawn();
             } else if (!armada.isGoDespawn()) {
-                int scoutalive = armada.isScoutNull();
-                if (scoutalive != -1) {
-                    armada.respawnScout(scoutalive);
+                int escortalive = armada.isEscortNull();
+                if (escortalive != -1) {
+                    armada.respawnEscort(escortalive);
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetAssignment;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import java.util.Random;
 
 public class Nomad_CampaignArmada {
 
@@ -12,8 +13,8 @@ public class Nomad_CampaignArmada {
     private final CampaignFleetAPI[] escortFleet;
     private SectorEntityToken home;
     private boolean goDespawn;
-    private Nomad_SpecialFactory factory;
-
+    private final Nomad_SpecialFactory factory;
+    private static final int ROYALC = 0;
     private static final int SCOUT1 = 1;
     private static final int SCOUT2 = 2;
 
@@ -22,7 +23,7 @@ public class Nomad_CampaignArmada {
         this.escortFleet = new CampaignFleetAPI[sizeEscort];
         this.home = Global.getSector().getEntityById("stationnom1");
         if (this.home == null) {
-            Global.getSector().getEntitiesWithTag(Tags.COMM_RELAY).get(0);
+            this.home = Global.getSector().getEntitiesWithTag(Tags.COMM_RELAY).get(0);
         }
         goDespawn = false;
     }
@@ -60,7 +61,7 @@ public class Nomad_CampaignArmada {
             return;
         }
 
-        Global.getSector().getCampaignUI().addMessage("despawn");
+       // Global.getSector().getCampaignUI().addMessage("despawn");
 
         if (home == null) {
             if (this.leaderFleet != null) {
@@ -115,20 +116,41 @@ public class Nomad_CampaignArmada {
         }
     }
 
-    public int isScoutNull() {
-        if (escortFleet[SCOUT1] == null || !escortFleet[SCOUT1].isAlive()) {
+    public int isEscortNull() {
+
+        if (under_isScout(SCOUT1)) {
             return SCOUT1;
         }
-        if (escortFleet[SCOUT2] == null || !escortFleet[SCOUT2].isAlive()) {
+        if (under_isScout(SCOUT2)) {
             return SCOUT2;
+        }
+        if (under_isRoyalC(ROYALC)) {
+            // Royal do not respawn always each three days, contrary to scout
+            int rand = new Random().nextInt(4);
+            if (rand == 0) {
+                return ROYALC;
+            }
         }
         return -1;
     }
 
-    public void respawnScout(int index) {
-        Global.getSector().getCampaignUI().addMessage("Respawn Scout"+index);
+    private boolean under_isScout(int index) {
+        return (escortFleet[index] == null || !escortFleet[index].getFlagship().getHullId().equals("nom_flycatcher"));
+    }
+
+    private boolean under_isRoyalC(int index) {
+        return (escortFleet[index] == null || !escortFleet[index].getFlagship().getHullId().equals("nom_gila_monster"));
+    }
+
+    public void respawnEscort(int index) {
+       // Global.getSector().getCampaignUI().addMessage("Respawn " + index);
 
         if (index == SCOUT1 || index == SCOUT2) {
+            if (this.escortFleet[index] != null) {
+                this.escortFleet[index].clearAssignments();
+                this.escortFleet[index].addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, this.home, 10000f);
+            }
+
             this.setEscortFleets(factory.spawnScoutFleet(this.leaderFleet), index);
 
             SectorEntityToken goOn;
@@ -140,7 +162,24 @@ public class Nomad_CampaignArmada {
 
             this.escortFleet[index].addAssignment(FleetAssignment.GO_TO_LOCATION, goOn, 10000f);
             this.escortFleet[index].addAssignment(FleetAssignment.PATROL_SYSTEM, goOn, 20);
+        }
+        if (index == ROYALC) {
+            if (this.escortFleet[index] != null) {
+                this.escortFleet[index].clearAssignments();
+                this.escortFleet[index].addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, this.home, 10000f);
+            }
 
+            this.setEscortFleets(factory.spawnRoyalCommandFleet(this.home), index);
+
+            SectorEntityToken goOn;
+            if (this.leaderFleet.getCurrentAssignment() != null) {
+                goOn = this.leaderFleet.getCurrentAssignment().getTarget();
+            } else {
+                goOn = this.home;
+            }
+
+            this.escortFleet[index].addAssignment(FleetAssignment.GO_TO_LOCATION, goOn, 10000f);
+            this.escortFleet[index].addAssignment(FleetAssignment.PATROL_SYSTEM, goOn, 20);
         }
     }
 

@@ -4,12 +4,12 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
-import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV2;
 import java.util.Random;
 
 public class Nomad_SpecialFactory {
@@ -22,7 +22,7 @@ public class Nomad_SpecialFactory {
      */
     private final String nameFaction = "nomads_oasis";
 
-    public CampaignFleetAPI spawnRoyalCommandFleet(CampaignFleetAPI chief) {
+    public CampaignFleetAPI spawnRoyalCommandFleet(SectorEntityToken entity) {
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Royal Command Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
@@ -67,16 +67,20 @@ public class Nomad_SpecialFactory {
 
         FleetFactory.finishAndSync(fleet);
 
-        this.putLocation(chief, fleet);
+        this.putLocation(entity, fleet);
         return fleet;
     }
 
-    public CampaignFleetAPI spawnScoutFleet(CampaignFleetAPI chief) {
+    public CampaignFleetAPI spawnScoutFleet(SectorEntityToken entity) {
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Scout Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
 
-        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_flycatcher_fang");
+        int rand=new Random().nextInt(2);
+        String ship=(rand==0)?"nom_flycatcher_fang":"nom_flycatcher_toad";
+                
+                
+        FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP, ship);
         member.setShipName("Scout Leader Ship");
         member.setFlagship(true);
 
@@ -98,11 +102,11 @@ public class Nomad_SpecialFactory {
 
         FleetFactory.finishAndSync(fleet);
 
-        this.putLocation(chief, fleet);
+        this.putLocation(entity, fleet);
         return fleet;
     }
 
-    public CampaignFleetAPI spawnAssassinFleet(CampaignFleetAPI chief) {
+    public CampaignFleetAPI spawnAssassinFleet(SectorEntityToken entity) {
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Assassin Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
@@ -129,11 +133,11 @@ public class Nomad_SpecialFactory {
 
         FleetFactory.finishAndSync(fleet);
 
-        this.putLocation(chief, fleet);
+        this.putLocation(entity, fleet);
         return fleet;
     }
 
-    public CampaignFleetAPI spawnRoyalGuardFleet(CampaignFleetAPI chief) {
+    public CampaignFleetAPI spawnRoyalGuardFleet(SectorEntityToken entity) {
         CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(nameFaction, "Royal Guard Fleet", true);
 
         FleetDataAPI data = fleet.getFleetData();
@@ -179,7 +183,7 @@ public class Nomad_SpecialFactory {
 
         FleetFactory.finishAndSync(fleet);
 
-        this.putLocation(chief, fleet);
+        this.putLocation(entity, fleet);
         return fleet;
     }
 
@@ -196,18 +200,7 @@ public class Nomad_SpecialFactory {
 
         member.setCaptain(person);
         data.addFleetMember(member);
-        /*
-        String[] members = {
-            "nom_sandstorm_assault",
-            "nom_sandstorm_assault",
-            "nom_rattlesnake_assault",
-            "nom_rattlesnake_assault",
-            "nom_komodo_mk2_assault",
-            "nom_komodo_mk2_assault",};
-               for (String ship : members) {
-            data.addFleetMember(Global.getFactory().createFleetMember(FleetMemberType.SHIP, ship));
-        }
-         */
+
         this.addRandom(data,
                 new String[]{
                     "nom_sandstorm_assault",
@@ -236,11 +229,11 @@ public class Nomad_SpecialFactory {
         return fleet;
     }
 
-    private void putLocation(CampaignFleetAPI chief, CampaignFleetAPI newFleet) {
-        LocationAPI location = chief.getContainingLocation();
+    private void putLocation(SectorEntityToken entity, CampaignFleetAPI newFleet) {
+        LocationAPI location = entity.getContainingLocation();
 
         location.addEntity(newFleet);
-        newFleet.setLocation(chief.getLocation().x, chief.getLocation().y);
+        newFleet.setLocation(entity.getLocation().x, entity.getLocation().y);
     }
 
     private void addRandom(FleetDataAPI data, String[] members, int[] weight, int weightsize, int fleetPoints, int maxlevelOfficer) {

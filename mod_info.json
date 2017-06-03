@@ -6,5 +6,5 @@
 	"description":"The Nomad Armada wanders about, Experimental version per Snrasha, Lore per PokerChen",
   "modPlugin": "src.data.scripts.world.NAModPlugin",
   "jars":["jars/NA.jar"],
-  "gameVersion":"0.8a",
+  "gameVersion":"0.8.1a",
 }

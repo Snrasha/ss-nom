@@ -38,7 +38,7 @@ public class Nomad_SpecialCampaignFleetAI implements Script {
         location.addEntity(chief);
 
         chief.setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
-        Global.getSector().getCampaignUI().addMessage("Launch:Go on 2 " + this.home.getId());
+       // Global.getSector().getCampaignUI().addMessage("Launch:Go on 2 " + this.home.getId());
         chief.addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 5f, this);
 
         Nomad_SpecialFactory factory = armada.getFactory();
@@ -58,7 +58,7 @@ public class Nomad_SpecialCampaignFleetAI implements Script {
             this.hideoutLocation = Global.getSector().getEntityById("stationNom1");
         }
         int duration = 10;
-        Global.getSector().getCampaignUI().addMessage("Run:Go on " + hideoutLocation.getId());
+     //   Global.getSector().getCampaignUI().addMessage("Run:Go on " + hideoutLocation.getId());
         this.armada.getLeaderFleet().getAI().doNotAttack(Global.getSector().getPlayerFleet(), 10000f);
         this.armada.getLeaderFleet().addAssignment(FleetAssignment.GO_TO_LOCATION, hideoutLocation, 10000f, this);
         this.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, duration, this);
