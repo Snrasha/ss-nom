@@ -6,3 +6,7 @@ Snrasha:
 -Fix hullmod when i have completely forgot.
 -Fix ship supply to deploy.
 -Fix OP, put main hullmod to build-in.
+
+
+PokerChen:
+-Add Lore
