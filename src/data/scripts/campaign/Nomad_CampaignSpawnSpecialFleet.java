@@ -6,26 +6,30 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.SectorAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
 import com.fs.starfarer.api.util.IntervalUtil;
+import java.util.Iterator;
 import src.data.scripts.campaign.AI.Nomad_SpecialCampaignFleetAI;
 
 public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
-    private final CampaignArmada armada = new CampaignArmada(6);
+    private final CampaignArmada armada = new CampaignArmada(3);
     private final IntervalUtil timerrespawn;
     private PersonAPI person;
     private boolean oneTime = false;
+    private int cooldown = 0;
 
     public Nomad_CampaignSpawnSpecialFleet() {
 
         this.person = OfficerManagerEvent.createOfficer(Global.getSector().getFaction("nomads"), 20);
         // this.timerMonth = Global.getSector().getClock().getMonth(); // Launched the next month
         timerrespawn = new IntervalUtil(3, 3);
+
         oneTime = false;
 
     }
@@ -56,13 +60,17 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
         this.timerrespawn.advance(Global.getSector().getClock().convertToMonths(amount));
 
         if (this.timerrespawn.intervalElapsed()) {
-            
-            
-            if (armada.isDespawn()) {
-   
-                spawnFleet();
-            } else if (armada.getLeaderFleet()==null || !armada.getLeaderFleet().isAlive() || !armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis")) {
 
+            if (armada.isDespawn()) {
+                if (cooldown > 3) {
+                    cooldown = 0;
+                    retireOasis();
+                    spawnFleet();
+                }
+
+                cooldown++;
+            } else if (armada.getLeaderFleet() == null || !armada.getLeaderFleet().isAlive() || !armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis")) {
+                insertOasis();
                 armada.despawn();
             }
 
@@ -109,4 +117,41 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
 
     }
 
+    private void insertOasis() {
+        SectorEntityToken station = Global.getSector().getEntityById("stationNom1");
+        if (station == null) {
+            return;
+        }
+
+        // add no more than one Oasis
+        int count = 0; // first count oasis ships (player could have bought one previously and sold it back)
+        FleetDataAPI station_ships = station.getCargo().getMothballedShips();
+        for (Iterator i = station_ships.getMembersInPriorityOrder().iterator(); i.hasNext();) {
+            FleetMemberAPI ship = (FleetMemberAPI) i.next();
+            if ("nom_oasis".equals(ship.getHullId())) {
+                ++count;
+            }
+        }
+        if (count == 0) {
+            station_ships.addFleetMember(Global.getFactory().createFleetMember(FleetMemberType.SHIP, "nom_oasis_standard"));
+        }
+
+    }
+
+    private void retireOasis() {
+        SectorEntityToken station = Global.getSector().getEntityById("stationNom1");
+        if (station == null) {
+            return;
+        }
+        // remove all Oasis hulls, there's only supposed to be one, and it's cruising around.
+        FleetDataAPI station_ships = station.getCargo().getMothballedShips();
+        for (Iterator i = station_ships.getMembersInPriorityOrder().iterator(); i.hasNext();) {
+            FleetMemberAPI ship = (FleetMemberAPI) i.next();
+            if ("nom_oasis".equals(ship.getHullId())) {
+                station_ships.removeFleetMember(ship);
+
+            }
+        }
+
+    }
 }

@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
@@ -15,18 +16,18 @@ import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
+import java.util.List;
 import java.util.Random;
 import src.data.scripts.campaign.CampaignArmada;
 
 public class Nomad_SpecialCampaignFleetAI implements Script {
 
     private SectorEntityToken hideoutLocation;
-    private SectorEntityToken home;
+    private final SectorEntityToken home;
     private CampaignArmada armada;
 
-
     public Nomad_SpecialCampaignFleetAI(CampaignArmada armada) {
-        this.armada=armada;
+        this.armada = armada;
         this.home = Global.getSector().getEntityById("stationNom1");
         if (this.home == null) {
             Global.getSector().getEntityById("nur_C");
@@ -35,107 +36,68 @@ public class Nomad_SpecialCampaignFleetAI implements Script {
 
     public void init() {
         LocationAPI location = this.home.getContainingLocation();
-        location.addEntity(armada.getLeaderFleet());
-        armada.getLeaderFleet().setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
+        location.addEntity(this.armada.getLeaderFleet());
+        this.armada.getLeaderFleet().setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
         Global.getSector().getCampaignUI().addMessage("Launch:Go on 2 " + this.home.getId());
-        armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 5f, this);
+        this.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, this.home, 5f, this);
 
-        armada.setEscortFleets(spawnRoyalCommandFleet(), 0);
-        armada.setEscortFleets(spawnRoyalGuardFleet(), 1);
-        armada.setEscortFleets(spawnRoyalGuardFleet(), 2);
-        armada.setEscortFleets(spawnAssassinFleet(), 3);
-        armada.setEscortFleets(spawnScoutFleet(), 4);
-        armada.setEscortFleets(spawnScoutFleet(), 5);
+        this.armada.setEscortFleets(spawnRoyalCommandFleet(), 0);
+        /*this.armada.setEscortFleets(spawnRoyalGuardFleet(), 1);
+        this.armada.setEscortFleets(spawnRoyalGuardFleet(), 2);
+        this.armada.setEscortFleets(spawnAssassinFleet(), 3);*/
+        this.armada.setEscortFleets(spawnScoutFleet(), 1);
+        this.armada.setEscortFleets(spawnScoutFleet(), 2);
 
-        for (CampaignFleetAPI escortFleet1 : armada.getEscortFleets()) {
+        for (CampaignFleetAPI escortFleet1 : this.armada.getEscortFleets()) {
             location.addEntity(escortFleet1);
             escortFleet1.setLocation(this.home.getLocation().x - 500, this.home.getLocation().y + 500);
         }
-
-        new Nomad_ScoutFleetAI(0,armada).init();
-        new Nomad_ScoutFleetAI(1,armada).init();
-        new Nomad_ScoutFleetAI(2,armada).init();
-        new Nomad_ScoutFleetAI(3,armada).init();
-        new Nomad_ScoutFleetAI(4,armada).init();
-        new Nomad_ScoutFleetAI(5,armada).init();
-
+        Nomad_Escort aiescort = new Nomad_Escort(this.armada);
+        aiescort.run(hideoutLocation);
     }
 
     @Override
     public void run() {
-       /* if (armada.getLeaderFleet().getCurrentAssignment() != null) {
-            Global.getSector().getCampaignUI().addMessage("Ass " + armada.getLeaderFleet().getCurrentAssignment().getAssignment().name());
-
-            if (armada.getLeaderFleet().getCurrentAssignment().getAssignment() == FleetAssignment.ORBIT_PASSIVE) {
-                if (armada.isEscortAlive(4)) {
-                    armada.getEscortFleets()[4].getCurrentAssignment().expire();
-                    //armada.getEscortFleets()[4].getCurrentAssignment().getOnCompletion().run();
-                }
-                if (armada.isEscortAlive(5)) {
-                    armada.getEscortFleets()[5].getCurrentAssignment().expire();
-                    //armada.getEscortFleets()[4].getCurrentAssignment().getOnCompletion().run();
-                }
-                return;
-            }
-        }*/
         pickLocation();
-        if (hideoutLocation == null) {
-              hideoutLocation = Global.getSector().getEntityById("stationNom1");
+        if (this.hideoutLocation == null) {
+            this.hideoutLocation = Global.getSector().getEntityById("stationNom1");
         }
-        Global.getSector().getCampaignUI().addMessage("Run:Go on 2 " + hideoutLocation.getId());
-        armada.getLeaderFleet().getAI().doNotAttack(Global.getSector().getPlayerFleet(), 10000f);
-        armada.getLeaderFleet().addAssignment(FleetAssignment.GO_TO_LOCATION, hideoutLocation, 10000f, this);
-        armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, 5f, this);
+        Global.getSector().getCampaignUI().addMessage("Run:Go on " + hideoutLocation.getId());
+        this.armada.getLeaderFleet().getAI().doNotAttack(Global.getSector().getPlayerFleet(), 10000f);
+        this.armada.getLeaderFleet().addAssignment(FleetAssignment.GO_TO_LOCATION, hideoutLocation, 10000f, this);
+        this.armada.getLeaderFleet().addAssignment(FleetAssignment.ORBIT_PASSIVE, hideoutLocation, 10f, this);
 
+        Nomad_Escort aiescort = new Nomad_Escort(this.armada);
+        aiescort.run(hideoutLocation);
     }
 
     private void pickLocation() {
-        WeightedRandomPicker<StarSystemAPI> systemPicker = new WeightedRandomPicker<StarSystemAPI>();
-
-        for (StarSystemAPI system : Global.getSector().getStarSystems()) {
-            float weight = system.getPlanets().size();
+        WeightedRandomPicker<MarketAPI> systemPicker = new WeightedRandomPicker<MarketAPI>();
+        List<MarketAPI> markets = Global.getSector().getEconomy().getMarketsCopy();
+        for (MarketAPI market : markets) {
+            if (market.getFactionId() != "nomads") {
+                if (market.getFaction().getRelationship("nomads") < 0) {
+                    continue;
+                }
+            }
+            float weight = market.getSize();
             float mult = 0f;
-
-            if (system.hasPulsar()) {
-                continue;
-            }
-
-            if (system.hasTag(Tags.THEME_MISC_SKIP)) {
-                mult = 1f;
-            } else if (system.hasTag(Tags.THEME_MISC)) {
-                mult = 3f;
-            } else if (system.hasTag(Tags.THEME_RUINS)) {
-                mult = 7f;
-            } else if (system.hasTag(Tags.THEME_REMNANT_DESTROYED)) {
-                mult = 3f;
-            }
-
-            if (mult <= 0) {
-                continue;
-            }
-            float dist = system.getLocation().length();
+            float dist = market.getStarSystem().getLocation().length();
             float distMult = Math.max(0, 50000f - dist);
 
-            systemPicker.add(system, weight * mult * distMult);
+            systemPicker.add(market, weight * mult * distMult);
         }
 
-        StarSystemAPI system = systemPicker.pick();
-
-        if (system != null) {
-            WeightedRandomPicker<SectorEntityToken> picker = new WeightedRandomPicker<SectorEntityToken>();
-            for (SectorEntityToken planet : system.getPlanets()) {
-                if (planet.isStar()) {
-                    continue;
-                }
-                if (planet.getMarket() != null
-                        && !planet.getMarket().isPlanetConditionMarketOnly()) {
-                    continue;
-                }
-
-                picker.add(planet);
-            }
-            hideoutLocation = picker.pick();
+        MarketAPI market = systemPicker.pick();
+        int flag = 0;
+        while (market == null || flag < 10) {
+            market = systemPicker.pick();
+            flag++;
         }
+        if (market == null) {
+            hideoutLocation = this.home;
+        }
+        hideoutLocation = market.getPrimaryEntity();
 
     }
 
