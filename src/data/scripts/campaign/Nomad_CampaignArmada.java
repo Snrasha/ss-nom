@@ -135,11 +135,11 @@ public class Nomad_CampaignArmada {
     }
 
     private boolean under_isScout(int index) {
-        return (escortFleet[index] == null || !escortFleet[index].getFlagship().getHullId().equals("nom_flycatcher"));
+        return (escortFleet[index] == null || !escortFleet[index].isAlive() || !escortFleet[index].getFlagship().getHullId().equals("nom_flycatcher"));
     }
 
     private boolean under_isRoyalC(int index) {
-        return (escortFleet[index] == null || !escortFleet[index].getFlagship().getHullId().equals("nom_gila_monster"));
+        return (escortFleet[index] == null || !escortFleet[index].isAlive() || !escortFleet[index].getFlagship().getHullId().equals("nom_gila_monster"));
     }
 
     public void respawnEscort(int index) {

@@ -62,7 +62,7 @@ public class Nomad_CampaignSpawnSpecialFleet implements EveryFrameScript {
                 }
 
                 cooldown++;
-            } else if (armada.getLeaderFleet() == null || !armada.getLeaderFleet().isAlive() || !armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis")) {
+            } else if (armada.getLeaderFleet() == null || !armada.getLeaderFleet().isAlive() || (armada.getLeaderFleet().getFlagship()!=null && !armada.getLeaderFleet().getFlagship().getHullId().equals("nom_oasis"))) {
 
                 insertOasis();
                 armada.despawn();

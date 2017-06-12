@@ -7,8 +7,8 @@ import src.data.scripts.campaign.Nomad_CampaignSpawnSpecialFleet;
 public class NAModPlugin extends BaseModPlugin {
 
     private static void initNA() {
-        /*   boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");  
-      if (!haveNexerelin || SectorManager.getCorvusMode())  */
+      boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");  
+      if (!haveNexerelin)  
         new NomadGen().generate(Global.getSector());
     }
 

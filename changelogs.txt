@@ -1,5 +1,20 @@
+1.014:
+-Add Lore per PokerChen.
+-Gila : OP now 55(before 40)
+
+
+1.013:
+-Fix two nullexception. (Forgot when i have fix the first nullexception)
+
+1.012:
+-Fix a nullexception.
+
+1.011:
+-Compatible Nexerelin (Nexerelin is not compatible with for the moment, but you can put file for compatible)
+
+
+
 1.01:
-Snrasha:
 -Retire my name on the description of the mod.
 -Up the collision radius of each ship.
 -Add the Oasis fleet
@@ -9,8 +24,4 @@ Snrasha:
 -Fix fuel/ly value
 -Fix too high cargo/fuel of frigates.
 -Divise the faction per two, The Oasis fleet is a special faction of nomads.
-
-
-
-PokerChen:
--Add Lore
+-add Lore per PokerChen

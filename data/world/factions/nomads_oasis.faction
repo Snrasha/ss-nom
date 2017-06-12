@@ -7,8 +7,8 @@
         "displayNameLongWithArticle":"the Nomad",
 	"shipNamePrefix":"NA",
 	"description":"No description yet.",
-	"logo":"graphics/factions/neutral_traders.png",
-	"crest":"graphics/factions/crest_neutral.png",
+	"logo":"graphics/nom/factions/ss_nom_Flag.png",
+	"crest":"graphics/nom/factions/ss_nom_Crest.png",
 	"showInIntelTab":false,
 	"names":{
 	},

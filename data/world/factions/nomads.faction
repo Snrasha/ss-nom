@@ -7,8 +7,8 @@
         "displayNameLongWithArticle":"the Nomad",
 	"shipNamePrefix":"NA",
 	"description":"No description yet.",
-	"logo":"graphics/factions/neutral_traders.png",
-	"crest":"graphics/factions/crest_neutral.png",
+	"logo":"graphics/nom/factions/ss_nom_Flag.png",
+	"crest":"graphics/nom/factions/ss_nom_Crest.png",
 	"names":{
 		"fringe":1,
 	},
@@ -81,8 +81,8 @@
 		"escortMedium":{
 			"fallback":{"combatMedium":1},
 		},
-		
-		
+
+
 		"combatSmall":{
 			"nom_death_bloom_strike":1,
 			"nom_yellowjacket_sniper":3,
@@ -107,8 +107,8 @@
 			"fallback":{"combatLarge":2},
 		},
 
-		
-		
+
+
 		# hybrid ships with good combat and cargo capacity
 		"combatFreighterSmall":{
 			"nom_wurm_assault":10,
@@ -128,14 +128,14 @@
 			"nom_gila_monster_antibattleship":10,
 			"fallback":{"combatFreighterMedium":2},
 		},
-		
+
 		"civilianRandom":{
 			"nom_wurm_assault":1000,
-			
+
 			"fallback":{"freighterSmall":1},
 		},
-	
-	
+
+
 		# carriers
 		"carrierSmall":{
                         "nom_flycatcher_scarab":2,
@@ -152,7 +152,7 @@
 			"nom_gila_monster_antibattleship":10,
 			"fallback":{"carrierMedium":4},
 		},
-	
+
 		# freighters and such
 		"freighterSmall":{
 			"nom_wurm_assault":30,
@@ -175,7 +175,7 @@
 			"nom_gila_monster_antibattleship":10,
 			"fallback":{"freighterMedium":2},
 		},
-		
+
 		"tankerSmall":{
 			"nom_wurm_assault":10,
 			"fallback":{"tankerMedium":0.5},
@@ -193,7 +193,7 @@
 			"nom_gila_monster_antibattleship":10,
 			"fallback":{"tankerMedium":2},
 		},
-		
+
 		"personnelSmall":{
 			"nom_wurm_assault":10,
 			"fallback":{"personnelMedium":0.5},
@@ -203,10 +203,10 @@
 			"fallback":{"personnelSmall":2},
 		},
 		"personnelLarge":{
-			
+
 			"fallback":{"personnelMedium":2},
 		},
-		
+
 		# utility ships
 		"tug":{
 			"fallback":{"utility":1},
@@ -219,7 +219,7 @@
 		},
 	},
 
-	"traits":{ 
+	"traits":{
 		"admiral":{
 		},
 		"captain":{
@@ -238,30 +238,30 @@
 		"medium":12,
 		"large":4,
 		"capital":1,
-		
+
 		# as fraction of combat ships of same size
 		"escortSmallFraction":1,
 		"escortMediumFraction":1,
-		
+
 		## poorly armed
 		"combatFreighterProbability":0.30,
-		
+
 		## poor access to capital ships
 		"minPointsForCombatCapital":30,
 		"minPointsForLargeCarrier":30,
-		
+
 		## slight preference for carriers
 		"smallCarrierProbability":0.30,
 		"mediumCarrierProbability":0.30,
 		"largeCarrierProbability":0.30,
-		
+
 		# officers
 		## fewer officers, less training
 		"officersPerPoint":0.20,
 		"officerLevelPerPoint":0.18,
 		"officerLevelBase":4,
 		"officerLevelVariance":0.2,
-		
+
 		"commanderSkillsPerLevel":0.2,
 		"commanderSkillChance":0.3,
 		"commanderSkillLevelPerLevel":0.15,
